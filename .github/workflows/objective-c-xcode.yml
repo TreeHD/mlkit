@@ -25,4 +25,4 @@ jobs:
         run: |
           cd ios/quickstarts/vision
           ls -lh
-          xcodebuild -project VisionExample.xcodeproj -scheme MLKitVisionExample -configuration Debug -sdk iphonesimulator build-for-testing
+          xcodebuild -project VisionExample.xcodeproj -scheme VisionExample -configuration Debug -sdk iphonesimulator build-for-testing
