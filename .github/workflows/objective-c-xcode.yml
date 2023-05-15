@@ -16,6 +16,11 @@ jobs:
           cd ios/quickstarts/vision
           ls -lh
           pod install
+      - name: List All Scheme
+        run: |
+          cd ios/quickstarts/vision
+          ls -lh
+          xcodebuild -project VisionExample.xcodeproj -list
       - name: Build project
         run: |
           cd ios/quickstarts/vision
