@@ -13,9 +13,12 @@ jobs:
       - uses: actions/checkout@v2
       - name: ChangeDir
         run: |
+          ls -lh
           cd ios/quickstarts/vision
+          ls -lh
       - name: Install dependencies
         run: |
+          ls -lh
           pod install
       - name: Build project
         run: |
