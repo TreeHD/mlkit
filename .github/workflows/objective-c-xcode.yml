@@ -25,4 +25,7 @@ jobs:
         run: |
           cd ios/quickstarts/vision
           ls -lh
-          xcodebuild -project VisionExample.xcodeproj -scheme VisionExample -configuration Debug -sdk iphonesimulator build-for-testing
+          device='iPhone 13'
+          platform='iOS Simulator'
+          xcodebuild -project VisionExample.xcodeproj -scheme VisionExample -configuration Debug build-for-testing -destination "platform=$platform,name=$device"
+          ls -lh
