@@ -11,15 +11,13 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - name: ChangeDir
-        run: |
-          ls -lh
-          cd ios/quickstarts/vision
-          ls -lh
       - name: Install dependencies
         run: |
+          cd ios/quickstarts/vision
           ls -lh
           pod install
       - name: Build project
         run: |
+          cd ios/quickstarts/vision
+          ls -lh
           xcodebuild -project VisionExample.xcodeproj -scheme MLKitVisionExample -configuration Debug -destination platform=iOS Simulator,name=iPhone 13 Pro Max
