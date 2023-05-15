@@ -1,46 +1,20 @@
-name: Xcode - Build and Analyze
+name: ML Kit Vision iOS Example
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches:
+    - master
 
 jobs:
   build:
-    name: Build and analyse default scheme using xcodebuild command
+    name: Build and Test default scheme using any available iPhone simulator
     runs-on: macos-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Set Default Scheme
+      - uses: actions/checkout@v2
+      - name: Install dependencies
         run: |
-          scheme_list=$(xcodebuild -list -json | tr -d "\n")
-          default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
-          echo $default | cat >default
-          echo Using default scheme: $default
-      - name: Change Dir
+          brew install cocoapods
+          pod install
+      - name: Build project
         run: |
-          cd ios/quickstarts/vision
-      - name: get Dependencies
-        run: |
-          pod install --repo-update
-      - name: Build
-        env:
-          scheme: ${{ 'default' }}
-        run: |
-          if [ $scheme = default ]; then scheme=$(cat default); fi
-          if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
-          file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
-          xcodebuild clean build analyze -scheme "$scheme" -"$filetype_parameter" "$file_to_build" | xcpretty && exit ${PIPESTATUS[0]}
-      - name: Create file status_build_test.txt and write the job status into it
-        if: always()
-        run: |
-          echo ${{ job.status }} > status_build_test.txt
-      - name: Upload file status_build_test.txt as an artifact
-        if: always()
-        uses: actions/upload-artifact@v1
-        with:
-          name: pass_status_build_test
-          path: status_build_test.txt
+          xcodebuild -workspace MLKitVisionExample.xcworkspace -scheme MLKitVisionExample -configuration Debug -destination platform=iOS Simulator,name=iPhone 13 Pro Max
